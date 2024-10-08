@@ -1,4 +1,4 @@
-const Sauce =require ('../moduls/sauce');
+const Sauce = require('../models/sauce');
 
 exports.createSauce = (req, res, next) => {
   const sause = new Sauce({
@@ -72,7 +72,7 @@ exports.modyfySauce = (req, res, next) => {
   );
 };
 
-exports.deleteSauce = (req.res, next) => {
+exports.deleteSauce = (req, res, next) => {
   Sauce.deleteOne({ _id: req.parms.id }).then(
     () => {
       res.status(200).json({

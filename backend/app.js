@@ -1,16 +1,12 @@
-//password: NrDllR4xnU3PhMLh
-//password:d5bKK58Ct7QeIrqA username:somayyehkm
-//mongodb+srv://somayyehkm:<db_password>@cluster0.hcwwr.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
-const sauceRoutes =require('./routes/stuff');
+const sauceRoutes = require('./routes/stuff');
 
 const app = express();
 
-mongoose.connect('mongodb+srv://somayyehkm:<db_d5bKK58Ct7QeIrqA>@cluster0.hcwwr.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0').then(() => {
+mongoose.connect(process.env.DB_URL).then(() => {
   console.log('Successfully added to mongoDB Atlas');
 })
   .catch((error) => {
@@ -26,8 +22,8 @@ app.use((req, res, next) => {
 });
 
 app.use(bodyParser.json());
-
-app.use('/api/sauce',sauceRoutes);
+//TODO add user router 
+app.use('/api/sauce', sauceRoutes);
 
 module.exports = app;
 

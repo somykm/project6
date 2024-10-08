@@ -1,8 +1,11 @@
+const dotenv = require('dotenv');
+dotenv.config();
+
 const http = require('http');
 const app = require('./app');
 
 app.set('port', process.env.PORT || 3000);
-
+//FIXME look at course to find out where the listen goes
 server.listen( process.env.PORT || 3000);
 
 
