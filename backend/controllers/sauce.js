@@ -1,7 +1,7 @@
 const Sauce = require('../models/sauce');
 
 exports.createSauce = (req, res, next) => {
-  const sause = new Sauce({
+  const sauce = new Sauce({
     name: req.body.name,
     manufacturer: req.body.manufacturer,
     description: req.body.description,
@@ -43,8 +43,8 @@ exports.getOneSauce = (req, res, next) => {
   );
 };
 
-exports.modyfySauce = (req, res, next) => {
-  const sause = new Sauce({
+exports.modifySauce = (req, res, next) => {
+  const sauce = new Sauce({
     _id: req.params.id,
     name: req.body.name,
     manufacturer: req.body.manufacturer,
