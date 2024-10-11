@@ -6,7 +6,7 @@ const app = require('./app');
 
 app.set('port', process.env.PORT || 3000);
 //FIXME look at course to find out where the listen goes
-server.listen( process.env.PORT || 3000);
+// server.listen( process.env.PORT || 3000);
 
 
 const normalizePort = val => {
