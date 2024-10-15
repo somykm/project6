@@ -1,7 +1,7 @@
-const Sauce = require('../models/sauce');
+const Thing = require('../models/thing');
 
 exports.createSauce = (req, res, next) => {
-  const sauce = new Sauce({
+  const thing = new Thing({
     name: req.body.name,
     manufacturer: req.body.manufacturer,
     description: req.body.description,
@@ -14,7 +14,7 @@ exports.createSauce = (req, res, next) => {
     usersDislikes: req.body.usersDisliked,
     userId: req.body.userId
   });
-  sauce.save().then(() => {
+  thing.save().then(() => {
     res.status(201).json({
       message: "Post saved successfully!"
     })
@@ -28,7 +28,7 @@ exports.createSauce = (req, res, next) => {
 };
 
 exports.getOneSauce = (req, res, next) => {
-  Sauce.findOne({
+  Thing.findOne({
     _id: req.params.id
   }).then(
     (sauce) => {
@@ -44,7 +44,7 @@ exports.getOneSauce = (req, res, next) => {
 };
 
 exports.modifySauce = (req, res, next) => {
-  const sauce = new Sauce({
+  const thing = new Thing({
     _id: req.params.id,
     name: req.body.name,
     manufacturer: req.body.manufacturer,
@@ -59,7 +59,7 @@ exports.modifySauce = (req, res, next) => {
     userId: req.body.userId
   });
 
-  Sauce.updateOne({ _id: req.params.id }, sauce).then(() => {
+  Thing.updateOne({ _id: req.params.id }, thing).then(() => {
     res.status(201).json({
       message: 'Sauce updated successfully!'
     });
@@ -73,19 +73,19 @@ exports.modifySauce = (req, res, next) => {
 };
 
 exports.deleteSauce = (req, res, next) => {
-  Sauce.findOne({_id: req.params.id}).then(
-    (sauce) => {
-      if(!sauce){
+  Thing.findOne({ _id: req.params.id }).then(
+    (thing) => {
+      if (!thing) {
         return res.status(404).json({
           error: new Error('No such thing!')
         });
       }
-      if (sauce.userId !== req.auth.userId){
+      if (thing.userId !== req.auth.userId) {
         return res.status(400).json({
           error: new Error('Unauthorized request!')
         })
       }
-      Sauce.deleteOne({ _id: req.parms.id }).then(
+      Thing.deleteOne({ _id: req.parms.id }).then(
         () => {
           res.status(200).json({
             message: 'Chocen sauce deleted!'
@@ -102,7 +102,7 @@ exports.deleteSauce = (req, res, next) => {
 };
 
 exports.getAllSauces = (req, res, next) => {
-  Sauce.find().then(
+  Thing.find().then(
     (sauces) => {
       res.status(200).json(sauces);
     }
