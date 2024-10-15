@@ -5,7 +5,7 @@ exports.createSauce = (req, res, next) => {
   const url = req.protocol + '://' + req.get('host');
   req.body.thing = JSON.parse(req.body.thing);
   const thing = new Thing({
-    name: req.body.thing.Errorname,
+    name: req.body.thing.name,
     manufacturer: req.body.thing.manufacturer,
     description: req.body.thing.description,
     heat: req.body.thing.heat,
@@ -14,7 +14,7 @@ exports.createSauce = (req, res, next) => {
     imageUrl: url + '/images/' + req.file.filename,
     mainPepper: req.body.thing.mainPepper,
     usersLiked: req.body.thing.usersLiked,
-    usersDislikes: req.body.thing.usersDisliked,
+    usersDisliked: req.body.thing.usersDisliked,
     userId: req.body.thing.userId
   });
   thing.save().then(() => {

@@ -17,14 +17,15 @@ mongoose.connect(process.env.DB_URL).then(() => {
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Header', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
-  res.setHeader('Access-Control-Allow-Header-Method', 'GET,POST,PUT, DELETE, PATCH, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Header-Methods', 'GET,POST,PUT, DELETE, PATCH, OPTIONS');
   next();
 });
 
 app.use(bodyParser.json());
 //TODO add user router (done)
-app.use('/images', express.static(path.join(_dirname, 'images')));
+app.use('/images', express.static(path.join(__dirname, 'images')));
+
 app.use('/api/sauce', sauceRoutes);
 app.use('/api/auth', userRoutes);
 
