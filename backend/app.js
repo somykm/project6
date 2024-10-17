@@ -5,10 +5,13 @@ const path = require('path');
 const sauceRoutes = require('./routes/sauce');
 const userRoutes = require('./routes/user');
 
+const Sauce = require('./models/sauce');///
+
 const app = express();
+app.use(express.json());
 
 mongoose.connect(process.env.DB_URL).then(() => {
-  console.log('Successfully added to mongoDB Atlas');
+  console.log('Successfully connected to mongoDB Atlas');
 })
   .catch((error) => {
     console.log('Unable to connect to MongoDB atlas!');
@@ -23,10 +26,9 @@ app.use((req, res, next) => {
 });
 
 app.use(bodyParser.json());
-//TODO add user router (done)
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
-app.use('/api/sauce', sauceRoutes);
+app.use('/api/sauces', sauceRoutes);
 app.use('/api/auth', userRoutes);
 
 module.exports = app;

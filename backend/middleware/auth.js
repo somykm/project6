@@ -8,7 +8,7 @@ module.exports = (req, res, next) => {
     req.auth = { userId };
 
     if (req.body.userId && req.body.userId !== userId) {
-      throw 'Invalid user ID';
+      throw '401 Error (user is not authorized)';
     } else {
       next();
     }
