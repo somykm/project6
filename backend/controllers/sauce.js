@@ -2,8 +2,8 @@ const sauce = require('../models/sauce');
 const fs = require('fs');
 
 exports.createSauce = (req, res, next) => {
-  const url = req.protocol + '://' + req.get('host');
   req.body.sauce = JSON.parse(req.body.sauce);
+  const url = req.protocol + '://' + req.get('host');
   const sauce = new Sauce({
     name: req.body.sauce.name,
     manufacturer: req.body.sauce.manufacturer,
@@ -17,15 +17,17 @@ exports.createSauce = (req, res, next) => {
     usersDisliked: req.body.sauce.usersDisliked,
     userId: req.body.sauce.userId
   });
-  sauce.save().then(() => {
-    res.status(201).json({
-      message: "Post saved successfully!"
-    })
-  }).catch((error) => {
-    res.status(400).json({
-      error: error
-    });
-  });
+  sauce.save().then(
+    () => {
+      res.status(201).json({
+        message: "Post saved successfully!"
+      });
+    }).catch(
+      (error) => {
+        res.status(400).json({
+          error: error
+        });
+      });
 };
 
 exports.getOneSauce = (req, res, next) => {
@@ -79,12 +81,12 @@ exports.modifySauce = (req, res, next) => {
       userId: req.body.userId
     };
   }
-
-  sauce.updateOne({ _id: req.params.id }, sauce).then(() => {
-    res.status(201).json({
-      message: 'Sauce updated successfully!'
-    });
-  }
+  Sauce.updateOne({ _id: req.params.id }, sauce).then(
+    () => {
+      res.status(201).json({
+        message: 'Sauce updated successfully!'
+      });
+    }
   ).catch((error) => {
     res.status(400).json({
       error: error
@@ -95,33 +97,6 @@ exports.modifySauce = (req, res, next) => {
 exports.deleteSauce = (req, res, next) => {
   Sauce.findOne({ _id: req.params.id }).then(
     (sauce) => {
-      if(!sauce){
-        return res.status(400).then({
-          error: new Error('Object non throuve !')
-        });
-      }
-      if(sauce.userId !== req.auth.userId) {
-        return res.status(401).json({
-          error: new Error('Request not authorized!')
-        });
-      }
-      Sauce.deleteOne({_id: req.params.id}).then(
-        () => {
-          res.status(200).json({
-            message: 'Deleted !'
-          });
-        }
-      ).catch(
-        (error) => {
-          res.status(400).json({
-            error: error
-          });
-        }
-      );
-    }
-  );
-};
-/*
       const filename = sauce.imageUrl.split('/images/')[1];
       fs.unlink('/images/' + filename, () => {
         Sauce.deleteOne({ _id: req.params.id }).then(
@@ -136,8 +111,10 @@ exports.deleteSauce = (req, res, next) => {
           });
         });
       });
-      */
-    
+    });
+  };
+      
+
 
 
 exports.getAllSauces = (req, res, next) => {
