@@ -1,4 +1,4 @@
-//hendlers for signup and login
+
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');

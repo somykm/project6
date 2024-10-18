@@ -1,33 +1,54 @@
-const sauce = require('../models/sauce');
+const Sauce = require('../models/sauce');
 const fs = require('fs');
 
+// exports.createSauce = (req, res, next) => {
+//   req.body.sauce = JSON.parse(req.body.sauce);
+//   const url = req.protocol + '://' + req.get('host');
+//   const sauce = new Sauce({
+//     name: req.body.sauce.name,
+//     manufacturer: req.body.sauce.manufacturer,
+//     description: req.body.sauce.description,
+//     heat: req.body.sauce.heat,
+//     likes: req.body.sauce.likes,
+//     dislikes: req.body.sauce.dislikes,
+//     imageUrl: url + '/images/' + req.file.filename,
+//     mainPepper: req.body.sauce.mainPepper,
+//     usersLiked: req.body.sauce.usersLiked,
+//     usersDisliked: req.body.sauce.usersDisliked,
+//     userId: req.body.sauce.userId
+//   });
+//   sauce.save().then(
+//     () => {
+//       res.status(201).json({
+//         message: "Post saved successfully!"
+//       });
+//     }).catch(
+//       (error) => {
+//         res.status(400).json({
+//           error: error
+//         });
+//       });
+// };
 exports.createSauce = (req, res, next) => {
-  req.body.sauce = JSON.parse(req.body.sauce);
-  const url = req.protocol + '://' + req.get('host');
+  const sauceObject = JSON.parse(req.body.sauce);
+  delete sauceObject._id;
   const sauce = new Sauce({
-    name: req.body.sauce.name,
-    manufacturer: req.body.sauce.manufacturer,
-    description: req.body.sauce.description,
-    heat: req.body.sauce.heat,
-    likes: req.body.sauce.likes,
-    dislikes: req.body.sauce.dislikes,
-    imageUrl: url + '/images/' + req.file.filename,
-    mainPepper: req.body.sauce.mainPepper,
-    usersLiked: req.body.sauce.usersLiked,
-    usersDisliked: req.body.sauce.usersDisliked,
-    userId: req.body.sauce.userId
+    ...sauceObject,
+    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
   });
   sauce.save().then(
     () => {
       res.status(201).json({
-        message: "Post saved successfully!"
+        message: 'Sauce saved successfully!'
       });
-    }).catch(
-      (error) => {
-        res.status(400).json({
-          error: error
-        });
+    }
+  ).catch(
+    (error) => {
+      res.status(400).json({
+        error: error
       });
+    }
+  );
 };
 
 exports.getOneSauce = (req, res, next) => {
@@ -45,7 +66,7 @@ exports.getOneSauce = (req, res, next) => {
     }
   );
 };
-
+/*
 exports.modifySauce = (req, res, next) => {
   let sauce = new Sauce({ _id: req.params._id });
   if (req.file) {
@@ -93,6 +114,27 @@ exports.modifySauce = (req, res, next) => {
     });
   });
 };
+*/
+exports.modifySauce = (req, res, next) => {
+  const sauceObject = req.file ?
+    {
+      ...JSON.parse(req.body.sauce),
+      imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    } : { ...req.body };
+  Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, _id: req.params.id }).then(
+    () => {
+      res.status(200).json({
+        message: 'Sauce updated successfully!'
+      });
+    }
+  ).catch(
+    (error) => {
+      res.status(400).json({
+        error: error
+      });
+    }
+  );
+};
 
 exports.deleteSauce = (req, res, next) => {
   Sauce.findOne({ _id: req.params.id }).then(
@@ -113,9 +155,6 @@ exports.deleteSauce = (req, res, next) => {
       });
     });
   };
-      
-
-
 
 exports.getAllSauces = (req, res, next) => {
   Sauce.find().then(
@@ -130,3 +169,9 @@ exports.getAllSauces = (req, res, next) => {
     }
   );
 };
+
+
+
+
+
+

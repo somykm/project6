@@ -5,13 +5,14 @@ const sauceSchema = mongoose.Schema({
   manifacturer: { type: String, required: true },
   description: { type: String, required: true },
   heat: { type: Number, required: true },
-  likes: { type: Number, required: true },
-  dislikes: { type: Number, required: true },
+  likes: { type: Number, default: 0 },
+  dislikes: { type: Number, default: 0 },
   imageUrl: { type: String, required: true },
   mainPepper: { type: String, required: true },
-  usersLinked: { type: String, required: true },
-  usersDisliked: { type: String, required: true },
+  usersLinked: { type: [String], default: [] },
+  usersDisliked: { type: [String], default: [] },
   userId: { type: String, required: true }
 });
 
 module.exports = mongoose.model('Sauce', sauceSchema);
+
