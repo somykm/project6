@@ -9,7 +9,7 @@ exports.createSauce = (req, res, next) => {
     manufacturer: req.body.sauce.manufacturer,
     description: req.body.sauce.description,
     heat: req.body.sauce.heat,
-    imageUrl: url + '/images/' + req.file.filename,
+    imageUrl: req.file ? url + '/images/' + req.file.filename : '',
     mainPepper: req.body.sauce.mainPepper,
     userId: req.body.sauce.userId
   });
@@ -53,8 +53,8 @@ exports.modifySauce = (req, res, next) => {
       manufacturer: req.body.sauce.manufacturer,
       description: req.body.sauce.description,
       heat: req.body.sauce.heat,
-      // likes: req.body.sauce.likes,
-      // dislikes: req.body.sauce.dislikes,
+      likes: req.body.sauce.likes,
+      dislikes: req.body.sauce.dislikes,
       imageUrl: url + '/images/' + req.file.filename,
       mainPepper: req.body.sauce.mainPepper,
       userId: req.body.sauce.userId
@@ -70,8 +70,8 @@ exports.modifySauce = (req, res, next) => {
       dislikes: req.body.dislikes,
       imageUrl: req.body.imageUrl,
       mainPepper: req.body.mainPepper,
-      // usersLiked: req.body.usersLiked,
-      // usersDislikes: req.body.usersDisliked,
+      usersLiked: req.body.usersLiked,
+      usersDislikes: req.body.usersDisliked,
       userId: req.body.userId
     };
   }
@@ -122,7 +122,41 @@ exports.getAllSauces = (req, res, next) => {
   );
 };
 
+exports.likeSauce = (req, res, next) => {
+  const userId = req.body.userId;
+  const like = req.body.like;
+  Sauce.findOne({ _id: req.params.id }).then((sauce) => {
+    if (like === 1) {
+      //User likes the sauce 
+      if (!sauce.usersLiked.includes(userId)) {
+        sauce.usersLiked.push(userId);
+        sauce.likes += 1;
+      }
+    } else if (like === -1) {  //User dislikes the sauce 
+      if (!sauce.usersDisliked.includes(userId)) {
+        sauce.usersDisliked.push(userId);
+        sauce.dislikes += 1;
+      }
+    } else {
+      //User neutral (removing like or dislike) 
+      if (sauce.usersLiked.includes(userId)) {
+        sauce.likes -= 1;
+        sauce.usersLiked = sauce.usersLiked.filter((id) => id !== userId);
+      } else if (sauce.usersDisliked.includes(userId)) {
 
+        sauce.dislikes -= 1;
+        sauce.usersDisliked = sauce.usersDisliked.filter((id) => id !== userId);
+      }
+    }
+    sauce.save().then(() => {
+      res.status(200).json({ message: 'Preference saved!' });
+    }).catch((error) => {
+      res.status(400).json({ error: error });
+    });
+  }).catch((error) => {
+    res.status(404).json({ error: error });
+  });
+};
 
 
 
